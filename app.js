@@ -64,12 +64,11 @@ const animation = () => {
 //START
 
 for (i = 0; i < 100; i++) {
-  var r = Math.random() * 40;
-  var dx = Math.random() * 10;
-  var dy = Math.random() * 10;
-  var x = Math.random() * (HEIGHT - 2 * r) + r;
-
-  var y = Math.random() * (WIDTH - 2 * r) + r;
+  const r = Math.random() * 35 + 5;
+  const dx = Math.random() * 10 + 1;
+  const dy = Math.random() * 10 + 1;
+  const x = Math.random() * (WIDTH - 2 * r) + r;
+  const y = Math.random() * (HEIGHT - 2 * r) + r;
   CircleArray.push(new Circle(x, y, r, dx, dy));
 }
 
