@@ -1,77 +1,76 @@
-var canvas = document.querySelector('canvas');
-var w = (canvas.width = window.innerWidth);
-var h = (canvas.height = window.innerHeight);
-var c = canvas.getContext('2d');
-var i;
-var CircleArray = [];
-var g = c.createLinearGradient(0, 0, 0, canvas.height);
-g.addColorStop(0.0, 'blue');
-g.addColorStop(0.1, 'black');
-g.addColorStop(0.2, 'blue');
-g.addColorStop(0.3, 'black');
-g.addColorStop(0.4, 'blue');
-g.addColorStop(0.5, 'black');
-g.addColorStop(0.6, 'blue');
-g.addColorStop(0.7, 'black');
-g.addColorStop(0.8, 'blue');
-g.addColorStop(0.9, 'black');
-g.addColorStop(1.0, 'blue');
+document.querySelector('body').style.margin = 0;
+const canvasDOM = document.querySelector('canvas');
+const WIDTH = (canvasDOM.width = innerWidth);
+const HEIGHT = (canvasDOM.height = innerHeight);
 
-function Background() {
-  'use strict';
-  var g = c.createLinearGradient(0, 0, 0, canvas.height);
-  g.addColorStop(0.0, 'black');
-  g.addColorStop(0.1, 'blue');
-  g.addColorStop(0.2, 'black');
-  g.addColorStop(0.3, 'blue');
-  g.addColorStop(0.4, 'black');
-  g.addColorStop(0.5, 'blue');
-  g.addColorStop(0.6, 'black');
-  g.addColorStop(0.7, 'blue');
-  g.addColorStop(0.8, 'black');
-  g.addColorStop(0.9, 'blue');
-  g.addColorStop(1.0, 'black');
-  c.fillStyle = g;
-  c.fillRect(0, 0, w, h);
-}
+const canvas = canvasDOM.getContext('2d');
+const gradientCircle = canvas.createLinearGradient(0, 0, 0, HEIGHT);
+const CircleArray = [];
 
-function DrawCircle(x, y, r, dx, dy) {
-  'use strict';
-  this.x = x;
-  this.y = y;
-  this.r = r;
-  this.dx = dx;
-  this.dy = dy;
-  this.Draw = function () {
-    c.beginPath();
-    c.fillStyle = g;
-    c.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-    c.fill();
-    if (this.x + this.r > w || this.x - this.r < 0) {
+class Circle {
+  constructor(x, y, r, dx, dy) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.dx = dx;
+    this.dy = dy;
+  }
+  draw = function () {
+    canvas.beginPath();
+    canvas.fillStyle = gradientCircle;
+    canvas.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+    canvas.fill();
+    if (this.x + this.r > WIDTH || this.x - this.r < 0) {
       this.dx = -this.dx;
     }
 
-    if (this.y + this.r > h || this.y - this.r < 0) {
+    if (this.y + this.r > HEIGHT || this.y - this.r < 0) {
       this.dy = -this.dy;
     }
     this.x += this.dx;
     this.y += this.dy;
   };
 }
-function Animation() {
-  'use strict';
-  var c = new Background();
-  for (i = 0; i < CircleArray.length; i += 1) {
-    CircleArray[i].Draw();
+
+for (let i = 0; i <= 10; i++) {
+  if (i % 2 == 0) {
+    gradientCircle.addColorStop(i / 10, 'blue');
+  } else {
+    gradientCircle.addColorStop(i / 10, 'black');
   }
-  window.requestAnimationFrame(Animation);
 }
-for (i = 0; i < 100; i += 1) {
+
+const background = () => {
+  const gradientBackground = canvas.createLinearGradient(0, 0, 0, HEIGHT);
+  for (let i = 0; i <= 10; i++) {
+    if (i % 2 == 0) {
+      gradientBackground.addColorStop(i / 10, 'black');
+    } else {
+      gradientBackground.addColorStop(i / 10, 'blue');
+    }
+  }
+  canvas.fillStyle = gradientBackground;
+  canvas.fillRect(0, 0, WIDTH, HEIGHT);
+};
+
+const animation = () => {
+  background();
+  for (let i = 0; i < CircleArray.length; i++) {
+    CircleArray[i].draw();
+  }
+  requestAnimationFrame(animation);
+};
+
+//START
+
+for (i = 0; i < 100; i++) {
   var r = Math.random() * 40;
-  var dx = Math.random() * 9;
-  var dy = Math.random() * 6;
-  var x = Math.random() * (window.innerWidth - 2 * r) + r;
-  var y = Math.random() * (window.innerHeight - 2 * r) + r;
-  CircleArray.push(new DrawCircle(x, y, r, dx, dy));
+  var dx = Math.random() * 10;
+  var dy = Math.random() * 10;
+  var x = Math.random() * (HEIGHT - 2 * r) + r;
+
+  var y = Math.random() * (WIDTH - 2 * r) + r;
+  CircleArray.push(new Circle(x, y, r, dx, dy));
 }
-window.requestAnimationFrame(Animation);
+
+requestAnimationFrame(animation);
